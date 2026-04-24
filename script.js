@@ -11,7 +11,7 @@ const CV = {
   location: 'Kocaeli, TR',
   university: 'Isparta Üniversitesi',
   status: 'MÜSAİT',
-  email: 'ahmethakan@example.dev',
+  email: 'ahmettaydin88@gmail.com',
   linkedin: 'linkedin.com/in/ahmethakan-aydin',
   github: 'AhmetHakanAydn',
   summary: 'Problem çözmeyi seven, temiz ve işleyen yazılımlar peşinde koşan bir geliştiriciyim. Üretkenliğimin merkezinde yapay zeka var — kod üretimi, mimari kararlar, hata ayıklama, prototipleme. AI, benim en iyi takım arkadaşım.',
