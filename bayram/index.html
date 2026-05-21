@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0e2a" />
+  <meta name="description" content="Sevdiklerine isme özel bayram tebriği gönder. Havai fişekler, dijital harçlık ve daha fazlası." />
+
+  <title>İyi Bayramlar 🎉</title>
+
+  <link rel="icon" type="image/svg+xml" href="./assets/icons/favicon.svg" />
+  <link rel="apple-touch-icon" href="./assets/icons/icon-192.png" />
+  <link rel="manifest" href="./manifest.json" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://ahmethakanaydin.dev/bayram/" />
+  <meta property="og:title" content="İyi Bayramlar! 🎉" />
+  <meta property="og:description" content="Bayramını kutlamak için tıkla — havai fişekli sürpriz seni bekliyor." />
+  <meta property="og:image" content="https://ahmethakanaydin.dev/bayram/assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="İyi Bayramlar! 🎉" />
+  <meta name="twitter:description" content="Bayramını kutlamak için tıkla — havai fişekli sürpriz seni bekliyor." />
+  <meta name="twitter:image" content="https://ahmethakanaydin.dev/bayram/assets/og-image.png" />
+
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;800&family=Inter:wght@400;500;600&display=swap" />
+
+  <link rel="stylesheet" href="./css/base.css" />
+  <link rel="stylesheet" href="./css/setup.css" />
+  <link rel="stylesheet" href="./css/envelope.css" />
+  <link rel="stylesheet" href="./css/celebration.css" />
+  <link rel="stylesheet" href="./css/animations.css" />
+</head>
+<body>
+  <canvas id="tsparticles" aria-hidden="true"></canvas>
+
+  <main id="app">
+    <section id="setup" class="screen setup is-hidden" aria-label="Bayram bağlantısı oluştur" hidden>
+      <header class="setup__header">
+        <h1 class="setup__title">Sevdiklerine bayram sürprizi gönder 🎁</h1>
+        <p class="setup__subtitle">İsim ve IBAN'ı yaz, kişiye özel bağlantını oluştur.</p>
+      </header>
+
+      <form id="setup-form" class="setup__form" novalidate>
+        <label class="field" for="field-name">
+          <span class="field__label">Kime gönderiyorsun?</span>
+          <input type="text" id="field-name" name="isim" placeholder="Ör. Ahmet" maxlength="40" autocomplete="off" required />
+        </label>
+
+        <label class="field" for="field-iban">
+          <span class="field__label">IBAN</span>
+          <input type="text" id="field-iban" name="iban" placeholder="TR00 0000 0000 0000 0000 0000 00" inputmode="latin" autocomplete="off" required />
+          <span class="field__hint" id="field-iban-hint">Boşlukları biz hallederiz. TR + 24 rakam.</span>
+        </label>
+
+        <label class="field" for="field-tur">
+          <span class="field__label">Bayram türü <small>(opsiyonel)</small></span>
+          <select id="field-tur" name="tur">
+            <option value="">Otomatik (tarihten algıla)</option>
+            <option value="ramazan">Ramazan Bayramı 🌙</option>
+            <option value="kurban">Kurban Bayramı 🐑</option>
+          </select>
+        </label>
+
+        <button type="submit" class="setup__submit">Linki Oluştur</button>
+      </form>
+
+      <section id="setup-result" class="setup__result" aria-live="polite" hidden>
+        <h2>Linkin hazır! 🎉</h2>
+        <div class="setup__link-row">
+          <code id="setup-link">—</code>
+          <button type="button" id="setup-copy">Kopyala</button>
+        </div>
+        <div class="setup__share-buttons" id="setup-share-buttons">
+          <button type="button" data-share="whatsapp">WhatsApp</button>
+          <button type="button" data-share="x">X (Twitter)</button>
+          <button type="button" data-share="telegram">Telegram</button>
+        </div>
+        <button type="button" id="setup-preview" class="setup__preview">Önizleme aç</button>
+      </section>
+    </section>
+
+    <section id="intro" class="screen intro is-hidden" aria-label="Sürprizini aç" hidden>
+      <button id="envelope" class="envelope" aria-label="Zarfı aç" type="button">
+        <div class="envelope__sparkles" aria-hidden="true">
+          <span class="sparkle sparkle--1">✦</span>
+          <span class="sparkle sparkle--2">✦</span>
+          <span class="sparkle sparkle--3">✦</span>
+          <span class="sparkle sparkle--4">✦</span>
+          <span class="sparkle sparkle--5">✦</span>
+          <span class="sparkle sparkle--6">✦</span>
+        </div>
+
+        <div class="envelope__body" aria-hidden="true">
+          <div class="envelope__back"></div>
+
+          <div class="envelope__letter">
+            <span class="envelope__letter-emoji">🌙</span>
+            <span class="envelope__letter-text">İyi Bayramlar</span>
+            <span class="envelope__letter-line"></span>
+            <span class="envelope__letter-line envelope__letter-line--short"></span>
+          </div>
+
+          <div class="envelope__pocket"></div>
+
+          <svg class="envelope__seams" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            <path
+              d="M 0 38 L 50 92 L 100 38"
+              fill="none"
+              stroke="rgba(0,0,0,0.45)"
+              stroke-width="0.45"
+              vector-effect="non-scaling-stroke"
+            />
+            <path
+              d="M 0 38.6 L 50 92.6 L 100 38.6"
+              fill="none"
+              stroke="rgba(255,255,255,0.12)"
+              stroke-width="0.35"
+              vector-effect="non-scaling-stroke"
+            />
+          </svg>
+
+          <div class="envelope__flap"></div>
+
+          <div class="envelope__seal">
+            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Altın mum mührü">
+              <defs>
+                <radialGradient id="sealFill" cx="35%" cy="35%" r="65%">
+                  <stop offset="0%" stop-color="#fff5c2"/>
+                  <stop offset="50%" stop-color="#f5c842"/>
+                  <stop offset="100%" stop-color="#7d5a0c"/>
+                </radialGradient>
+                <radialGradient id="sealHighlight" cx="35%" cy="35%" r="40%">
+                  <stop offset="0%" stop-color="rgba(255,255,255,0.7)"/>
+                  <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+                </radialGradient>
+              </defs>
+              <g>
+                <circle cx="32" cy="32" r="30" fill="url(#sealFill)" stroke="#5a3f08" stroke-width="1"/>
+                <circle cx="32" cy="32" r="25" fill="none" stroke="rgba(0,0,0,0.35)" stroke-width="0.5" stroke-dasharray="1.5 2"/>
+                <path
+                  d="M32 14 L34.6 26 L47 26.4 L37 33.4 L40.6 45.6 L32 38.2 L23.4 45.6 L27 33.4 L17 26.4 L29.4 26 Z"
+                  fill="#7d5a0c"
+                  opacity="0.85"
+                />
+                <circle cx="32" cy="32" r="30" fill="url(#sealHighlight)"/>
+              </g>
+            </svg>
+          </div>
+
+          <div class="envelope__stamp">
+            <svg viewBox="0 0 40 50" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bayram pulu">
+              <defs>
+                <linearGradient id="stampBg" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#1a2456"/>
+                  <stop offset="100%" stop-color="#0a0e2a"/>
+                </linearGradient>
+              </defs>
+              <rect x="1.5" y="1.5" width="37" height="47" rx="1" fill="url(#stampBg)" stroke="#fff5c2" stroke-width="0.6" stroke-dasharray="1 1"/>
+              <circle cx="18" cy="20" r="9" fill="#fff5c2"/>
+              <circle cx="22" cy="18" r="8" fill="url(#stampBg)"/>
+              <circle cx="28" cy="13" r="1.4" fill="#fff5c2"/>
+              <text x="20" y="42" text-anchor="middle" font-size="6" font-weight="700" fill="#fff5c2" font-family="serif">BAYRAM</text>
+            </svg>
+          </div>
+        </div>
+
+        <span class="envelope__glow" aria-hidden="true"></span>
+        <span class="envelope__shadow" aria-hidden="true"></span>
+        <p class="envelope__hint">Zarfa dokun</p>
+      </button>
+    </section>
+
+    <section id="celebration" class="screen celebration is-hidden" aria-label="Bayram tebriği" hidden>
+      <header class="celebration__header">
+        <p class="celebration__eyebrow" id="bayram-type">Bayramınız mübarek olsun</p>
+        <h1 class="celebration__title" id="greeting">İyi Bayramlar!</h1>
+        <p class="celebration__subtitle" id="subtitle">Sağlık, huzur ve bereket dolu günler dilerim.</p>
+      </header>
+
+      <div class="countdown" id="countdown" hidden>
+        <span class="countdown__label">Bir sonraki bayrama</span>
+        <span class="countdown__value" id="countdown-value">—</span>
+      </div>
+
+      <article class="iban-card" id="iban-card" aria-label="Dijital harçlık">
+        <div class="iban-card__top">
+          <h2 class="iban-card__title">Dijital El Öpme 😊</h2>
+          <p class="iban-card__hint">Günün anlam ve önemi için</p>
+        </div>
+
+        <button type="button" class="iban-card__copy" id="iban-copy" aria-label="IBAN'ı kopyala">
+          <span class="iban-card__iban" id="iban-text">TR00 0000 0000 0000 0000 0000 00</span>
+          <span class="iban-card__icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" />
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+            </svg>
+          </span>
+        </button>
+
+        <details class="iban-card__qr-wrapper">
+          <summary>QR kodu göster</summary>
+          <div class="iban-card__qr" id="iban-qr" aria-hidden="true"></div>
+          <p class="iban-card__qr-hint">Banka uygulamandan taratıp kolayca transfer et.</p>
+        </details>
+      </article>
+
+      <nav class="share" aria-label="Paylaşım seçenekleri">
+        <button type="button" class="share__primary" id="share-primary">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="5" r="3" />
+            <circle cx="6" cy="12" r="3" />
+            <circle cx="18" cy="19" r="3" />
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+          </svg>
+          Sevdiklerinle Paylaş
+        </button>
+
+        <ul class="share__list" id="share-list" hidden>
+          <li><button type="button" data-share="whatsapp">WhatsApp</button></li>
+          <li><button type="button" data-share="x">X (Twitter)</button></li>
+          <li><button type="button" data-share="telegram">Telegram</button></li>
+          <li><button type="button" data-share="copy">Linki Kopyala</button></li>
+          <li><button type="button" data-share="card">Kartı PNG İndir</button></li>
+        </ul>
+      </nav>
+
+      <footer class="footer">
+        <p>✨ Bayramınız kutlu olsun ✨</p>
+      </footer>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>
